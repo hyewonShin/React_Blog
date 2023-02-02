@@ -1,13 +1,18 @@
-function App() {
-  const number = 3;
+import { useState } from "react";
 
-  const printHello = () => {
-    console.log("hello~~");
+function App() {
+  const [number, setNumber] = useState(3);
+
+  const double = () => {
+    const doubledNumber = number * 2;
+    setNumber(doubledNumber);
+    console.log(doubledNumber);
   };
 
   return (
     <>
-      <button onClick={printHello}>Submit</button>
+      <div>{number}</div>
+      <button onClick={double}>Submit</button>
     </>
   );
 }
