@@ -1,14 +1,13 @@
 function App() {
   const number = 3;
 
-  const double = (number) => {
-    return number * 2;
+  const printHello = () => {
+    console.log("hello~~");
   };
 
   return (
     <>
-      <div>{double(number)}</div>
-      <button>Submit</button>
+      <button onClick={printHello}>Submit</button>
     </>
   );
 }
