@@ -5,7 +5,12 @@ function App() {
     return number * 2;
   };
 
-  return <div>{double(number)}</div>;
+  return (
+    <>
+      <div>{double(number)}</div>
+      <button>Submit</button>
+    </>
+  );
 }
 
 export default App;
