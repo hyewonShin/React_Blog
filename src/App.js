@@ -26,7 +26,7 @@ function App() {
           onChange={(e) => {
             setBody(e.target.value);
           }}
-          rows="20"
+          rows="5"
         />
       </div>
       <button className="btn btn-primary" onClick={onSubmit}>
