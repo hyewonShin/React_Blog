@@ -1,20 +1,22 @@
 import { useState } from "react";
-// 리렌더링  : 함수가 한 번 더 실행된다는 뜻.
 function App() {
-  console.log("render");
-  const [number, setNumber] = useState(1);
-  const double = () => {
-    setNumber((prevState) => prevState * 2);
-    setNumber((prevState) => prevState * 2);
-  };
+  const [title, setTitle] = useState("");
 
   return (
-    <>
-      <div>{number}</div>
-      <button className="btn btn-primary" onClick={double}>
-        Submit
-      </button>
-    </>
+    <div className="container">
+      <div className="mb-3">
+        <label className="form-lable">Title</label>
+        <input
+          className="form-control"
+          value={title}
+          onChange={(e) => {
+            setTitle(e.target.value);
+            console.log(e.target.value);
+          }}
+        />
+      </div>
+      <button className="btn btn-primary">Post</button>
+    </div>
   );
 }
 
