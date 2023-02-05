@@ -15,7 +15,14 @@ const ListPage = () => {
     getPosts();
   }, []);
 
-  return <div>ListPage</div>;
+  return (
+    <div>
+      <h1>Blogs</h1>
+      {posts.map((post) => {
+        return <div key={post.id}>{post.title}</div>;
+      })}
+    </div>
+  );
 };
 
 export default ListPage;
