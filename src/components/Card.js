@@ -1,5 +1,6 @@
+import PropTypes from "prop-types";
+
 const Card = ({ title, children }) => {
-  console.log("children", children);
   return (
     <div className="card mb-3">
       <div className="card-body">
@@ -10,6 +11,15 @@ const Card = ({ title, children }) => {
       </div>
     </div>
   );
+};
+
+Card.propTypes = {
+  title: PropTypes.string.isRequired,
+  children: PropTypes.element,
+};
+
+Card.defaultProps = {
+  children: null,
 };
 
 export default Card;
