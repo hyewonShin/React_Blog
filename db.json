@@ -1,24 +1,9 @@
 {
   "posts": [
     {
-      "title": "hello",
-      "body": "body",
-      "id": 1
-    },
-    {
-      "title": "ㄴㅇㄹ",
-      "body": "ㄴㅇㄹ",
+      "title": "dd",
+      "body": "dd",
       "id": 2
-    },
-    {
-      "title": "ㄴㅇㄹ",
-      "body": "ㄴㅇㄹ",
-      "id": 3
-    },
-    {
-      "title": "히히",
-      "body": "호호",
-      "id": 4
     }
   ]
 }
