@@ -6,7 +6,6 @@ function App() {
   return (
     <Router>
       <NavBar />
-
       <div className="container">
         <Switch>
           {routes.map((route) => {
