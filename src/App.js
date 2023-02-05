@@ -16,10 +16,15 @@ function App() {
     <Router>
       <div>
         <Link to="/">Home</Link>
+        <br />
         <Link to="/blogs">Blogs</Link>
       </div>
+      {/* Switch : 해당하는 경로로 진입하면 다음 경로들은 자동으로 무시됌 */}
       <Switch>
-        <Route path="/">Home Page</Route>
+        {/* exact : 경로가 정확히 "/" 인 경우에만 home으로 이동 */}
+        <Route path="/" exact>
+          Home Page
+        </Route>
         <Route path="/blogs">
           <div className="container">
             <div className="mb-3">
