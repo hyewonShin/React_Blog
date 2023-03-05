@@ -3,8 +3,9 @@ import { useState, useEffect } from "react";
 import Card from "../components/Card";
 import { Link, useHistory } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
+import PropTypes from "prop-types";
 
-const BlogList = () => {
+const BlogList = ({ isAdmin }) => {
   const history = useHistory();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,7 +39,7 @@ const BlogList = () => {
 
   return posts
     .filter((post) => {
-      return post.publish;
+      return isAdmin || post.publish;
     })
     .map((post) => {
       return (
@@ -47,17 +48,27 @@ const BlogList = () => {
           title={post.title}
           onClick={() => history.push(`/blogs/${post.id}`)}
         >
-          <div>
-            <button
-              className="btn btn-danger btn-sm"
-              onClick={(e) => delteBlog(e, post.id)}
-            >
-              Delete
-            </button>
-          </div>
+          {isAdmin ? (
+            <div>
+              <button
+                className="btn btn-danger btn-sm"
+                onClick={(e) => delteBlog(e, post.id)}
+              >
+                Delete
+              </button>
+            </div>
+          ) : null}
         </Card>
       );
     });
+};
+
+BlogList.propTypes = {
+  isAdmin: PropTypes.bool,
+};
+
+BlogList.defaultProps = {
+  isAdmin: false,
 };
 
 export default BlogList;
