@@ -8,25 +8,48 @@ const BlogForm = ({ editing }) => {
   const { id } = useParams();
 
   const [title, setTitle] = useState("");
+  const [originalTitle, setOriginalTitle] = useState("");
   const [body, setBody] = useState("");
+  const [originalBody, setOriginalBody] = useState("");
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/posts/${id}`).then((res) => {
-      setTitle(res.data.title);
-      setBody(res.data.body);
-    });
-  }, [id]);
+    if (editing) {
+      axios.get(`http://localhost:3001/posts/${id}`).then((res) => {
+        setTitle(res.data.title);
+        setOriginalTitle(res.data.title);
+        setBody(res.data.body);
+        setOriginalBody(res.data.body);
+      });
+    }
+  }, [id, editing]);
+
+  //수정이 되어있는지 확인하는 함수
+  //수정이 되었을 시 true 반환, 수정되지 않았을 시 false 반환
+  const isEdited = () => {
+    return title !== originalTitle || body !== originalBody;
+  };
 
   const onSubmit = () => {
-    axios
-      .post("http://localhost:3001/posts", {
-        title,
-        body,
-        createdAt: Date.now(),
-      })
-      .then(() => {
-        history.push("/blogs");
-      });
+    if (editing) {
+      axios
+        .patch(`http://localhost:3001/posts/${id}`, {
+          title,
+          body,
+        })
+        .then(() => {
+          history.push(`/blogs/${id}`);
+        });
+    } else {
+      axios
+        .post("http://localhost:3001/posts", {
+          title,
+          body,
+          createdAt: Date.now(),
+        })
+        .then(() => {
+          history.push("/blogs");
+        });
+    }
   };
   return (
     <div>
@@ -52,7 +75,11 @@ const BlogForm = ({ editing }) => {
           rows="5"
         />
       </div>
-      <button className="btn btn-primary" onClick={onSubmit}>
+      <button
+        className="btn btn-primary"
+        onClick={onSubmit}
+        disabled={editing && !isEdited()}
+      >
         {editing ? "Edit" : "Post"}
       </button>
     </div>
