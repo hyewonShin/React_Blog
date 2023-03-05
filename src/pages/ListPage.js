@@ -11,7 +11,6 @@ const ListPage = () => {
 
   const getPosts = () => {
     axios.get("http://localhost:3001/posts").then((res) => {
-      console.log(res.data);
       setPosts(res.data);
       setLoading(false);
     });

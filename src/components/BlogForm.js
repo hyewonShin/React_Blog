@@ -1,12 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
+import PropTypes from "prop-types";
 
-const BlogForm = () => {
+const BlogForm = ({ editing }) => {
   const history = useHistory();
+  const { id } = useParams();
 
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+
+  useEffect(() => {
+    axios.get(`http://localhost:3001/posts/${id}`).then((res) => {
+      setTitle(res.data.title);
+      setBody(res.data.body);
+    });
+  }, [id]);
+
   const onSubmit = () => {
     axios
       .post("http://localhost:3001/posts", {
@@ -20,7 +30,7 @@ const BlogForm = () => {
   };
   return (
     <div>
-      <h1>Create a blog post</h1>
+      <h1>{editing ? "Edit" : "Create"} a blog post</h1>
       <div className="mb-3">
         <label className="form-lable">Title</label>
         <input
@@ -43,10 +53,18 @@ const BlogForm = () => {
         />
       </div>
       <button className="btn btn-primary" onClick={onSubmit}>
-        Post
+        {editing ? "Edit" : "Post"}
       </button>
     </div>
   );
+};
+
+BlogForm.propTypes = {
+  editing: PropTypes.bool,
+};
+
+BlogForm.defaultProps = {
+  editing: false,
 };
 
 export default BlogForm;
