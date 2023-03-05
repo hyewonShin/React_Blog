@@ -23,10 +23,16 @@ const BlogForm = ({ editing }) => {
     }
   }, [id, editing]);
 
-  //수정이 되어있는지 확인하는 함수
-  //수정이 되었을 시 true 반환, 수정되지 않았을 시 false 반환
   const isEdited = () => {
     return title !== originalTitle || body !== originalBody;
+  };
+
+  const goBack = () => {
+    if (editing) {
+      history.push(`/blogs/${id}`);
+    } else {
+      history.push(`/blogs`);
+    }
   };
 
   const onSubmit = () => {
@@ -51,6 +57,7 @@ const BlogForm = ({ editing }) => {
         });
     }
   };
+
   return (
     <div>
       <h1>{editing ? "Edit" : "Create"} a blog post</h1>
@@ -81,6 +88,9 @@ const BlogForm = ({ editing }) => {
         disabled={editing && !isEdited()}
       >
         {editing ? "Edit" : "Post"}
+      </button>
+      <button className="btn btn-danger ms-2" onClick={goBack}>
+        Cancel
       </button>
     </div>
   );
