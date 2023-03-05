@@ -18,7 +18,6 @@ const ShowPage = () => {
   };
 
   useEffect(() => {
-    console.log("hello");
     getPost(id);
   }, [id]);
 
