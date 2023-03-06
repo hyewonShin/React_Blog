@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Card from "../components/Card";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
 import PropTypes from "prop-types";
 import Pagination from "./Pagination";
@@ -10,8 +10,10 @@ const BlogList = ({ isAdmin }) => {
   const history = useHistory();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const getPosts = (page = 1) => {
+    setCurrentPage(page);
     let params = {
       _page: page,
       _limit: 5,
@@ -79,7 +81,11 @@ const BlogList = ({ isAdmin }) => {
   return (
     <div>
       {renderBlogList()}
-      <Pagination currentPage={1} numberOfPages={5} />
+      <Pagination
+        currentPage={currentPage}
+        numberOfPages={3}
+        onClick={getPosts}
+      />
     </div>
   );
 };
