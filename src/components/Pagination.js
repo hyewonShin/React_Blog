@@ -20,7 +20,7 @@ const Pagination = () => {
             3
           </a>
         </li>
-        <li classNameName="page-item">
+        <li className="page-item">
           <a className="page-link" href="#">
             Next
           </a>

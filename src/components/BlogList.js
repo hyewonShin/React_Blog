@@ -11,11 +11,15 @@ const BlogList = ({ isAdmin }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const getPosts = () => {
-    axios.get("http://localhost:3001/posts").then((res) => {
-      setPosts(res.data);
-      setLoading(false);
-    });
+  const getPosts = (page = 1) => {
+    axios
+      .get(
+        `http://localhost:3001/posts?_page=${page}&_limit=3&_sort=id&_order=desc`
+      )
+      .then((res) => {
+        setPosts(res.data);
+        setLoading(false);
+      });
   };
 
   const delteBlog = (e, id) => {

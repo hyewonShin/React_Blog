@@ -5,7 +5,7 @@ const AdminPage = () => {
   return (
     <div>
       <div className="d-flex justify-content-between">
-        <h1>Admin</h1>
+        <h1 className="mb-4">Admin</h1>
         <div>
           <Link to="/blogs/create" className="btn btn-success">
             create New
