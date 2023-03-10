@@ -1,13 +1,16 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Card from "../components/Card";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
 import PropTypes from "prop-types";
 import Pagination from "./Pagination";
 
 const BlogList = ({ isAdmin }) => {
   const history = useHistory();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const pageParam = params.get("page");
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,8 +22,11 @@ const BlogList = ({ isAdmin }) => {
     setNumberOfPages(Math.ceil(numberOfPosts / limit));
   }, [numberOfPosts]);
 
+  const onClickPageButton = (page) => {
+    history.push(`${location.pathname}?page=${page}`);
+    getPosts(page);
+  };
   const getPosts = (page = 1) => {
-    setCurrentPage(page);
     let params = {
       _page: page,
       _limit: limit,
@@ -43,6 +49,11 @@ const BlogList = ({ isAdmin }) => {
       });
   };
 
+  useEffect(() => {
+    setCurrentPage(parseInt(pageParam) || 1);
+    getPosts(parseInt(pageParam) || 1);
+  }, [pageParam]);
+
   const delteBlog = (e, id) => {
     e.stopPropagation();
     console.log("delete blog");
@@ -50,10 +61,6 @@ const BlogList = ({ isAdmin }) => {
       setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
     });
   };
-
-  useEffect(() => {
-    getPosts();
-  }, []);
 
   if (loading) {
     <LoadingSpinner />;
@@ -93,7 +100,7 @@ const BlogList = ({ isAdmin }) => {
         <Pagination
           currentPage={currentPage}
           numberOfPages={numberOfPages}
-          onClick={getPosts}
+          onClick={onClickPageButton}
         />
       )}
     </div>
