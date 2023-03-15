@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Card from "../components/Card";
 import { useHistory, useLocation } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -26,7 +26,8 @@ const BlogList = ({ isAdmin }) => {
     history.push(`${location.pathname}?page=${page}`);
     getPosts(page);
   };
-  const getPosts = (page = 1) => {
+
+  const getPosts = useCallback((page = 1) => {
     let params = {
       _page: page,
       _limit: limit,
@@ -39,20 +40,23 @@ const BlogList = ({ isAdmin }) => {
     }
 
     axios
-      .get(`http://localhost:3001/posts?`, {
+      .get(`http://localhost:3001/posts`, {
         params,
       })
-      .then((res) => {
-        setNumberOfPosts(res.headers["x-total-count"]);
-        setPosts(res.data);
-        setLoading(false);
-      });
-  };
+      .then(
+        (res) => {
+          setNumberOfPosts(res.headers["x-total-count"]);
+          setPosts(res.data);
+          setLoading(false);
+        },
+        [isAdmin]
+      );
+  });
 
   useEffect(() => {
     setCurrentPage(parseInt(pageParam) || 1);
     getPosts(parseInt(pageParam) || 1);
-  }, [pageParam]);
+  }, [pageParam, getPosts]);
 
   const delteBlog = (e, id) => {
     e.stopPropagation();
