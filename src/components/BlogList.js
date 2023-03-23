@@ -17,7 +17,7 @@ const BlogList = ({ isAdmin }) => {
   const [numberOfPosts, setNumberOfPosts] = useState(0);
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [searchText, setSearchText] = useState("");
-  const limit = 1;
+  const limit = 5;
 
   useEffect(() => {
     setNumberOfPages(Math.ceil(numberOfPosts / limit));
@@ -25,6 +25,7 @@ const BlogList = ({ isAdmin }) => {
 
   const onClickPageButton = (page) => {
     history.push(`${location.pathname}?page=${page}`);
+    setCurrentPage(page);
     getPosts(page);
   };
 
@@ -36,7 +37,6 @@ const BlogList = ({ isAdmin }) => {
       _order: "desc",
       title_like: searchText,
     };
-
     if (!isAdmin) {
       params = { ...params, publish: true };
     }
@@ -45,29 +45,24 @@ const BlogList = ({ isAdmin }) => {
       .get(`http://localhost:3001/posts`, {
         params,
       })
-      .then(
-        (res) => {
-          setNumberOfPosts(res.headers["x-total-count"]);
-          setPosts(res.data);
-          setLoading(false);
-        },
-        [isAdmin, searchText]
-      );
+      .then((res) => {
+        setNumberOfPosts(res.headers["x-total-count"]);
+        setPosts(res.data);
+        setLoading(false);
+      });
   });
 
   useEffect(() => {
     setCurrentPage(parseInt(pageParam) || 1);
     getPosts(parseInt(pageParam) || 1);
-  }, [pageParam, getPosts]);
+  }, []);
 
-  const delteBlog = (e, id) => {
+  const deleteBlog = (e, id) => {
     e.stopPropagation();
-    console.log("delete blog");
     axios.delete(`http://localhost:3001/posts/${id}`).then(() => {
       setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
     });
   };
-
   if (loading) {
     <LoadingSpinner />;
   }
@@ -84,7 +79,7 @@ const BlogList = ({ isAdmin }) => {
             <div>
               <button
                 className="btn btn-danger btn-sm"
-                onClick={(e) => delteBlog(e, post.id)}
+                onClick={(e) => deleteBlog(e, post.id)}
               >
                 Delete
               </button>
@@ -95,8 +90,12 @@ const BlogList = ({ isAdmin }) => {
     });
   };
 
-  const onSearch = () => {
-    getPosts(1);
+  const onSearch = (e) => {
+    if (e.key === "Enter") {
+      history.push(`${location.pathname}?page=1`);
+      setCurrentPage(1);
+      getPosts(1);
+    }
   };
 
   return (
