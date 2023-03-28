@@ -4,7 +4,6 @@ const Pagination = ({ currentPage, numberOfPages, onClick, limit }) => {
   const currentSet = Math.ceil(currentPage / limit);
   const lastSet = Math.ceil(numberOfPages / limit);
   const startPage = limit * (currentSet - 1) + 1;
-  console.log(startPage);
   const numberOfPageForSet =
     currentSet === lastSet ? numberOfPages % limit : limit;
 
