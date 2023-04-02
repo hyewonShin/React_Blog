@@ -1,12 +1,12 @@
 import axios from "axios";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Card from "../components/Card";
 import { useHistory, useLocation } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
 import PropTypes from "prop-types";
 import Pagination from "./Pagination";
 import Toast from "../components/Toast";
-import { v4 as uuidv4 } from "uuid";
+import useToast from "../hooks.js/toast";
 
 const BlogList = ({ isAdmin }) => {
   const history = useHistory();
@@ -19,8 +19,7 @@ const BlogList = ({ isAdmin }) => {
   const [numberOfPosts, setNumberOfPosts] = useState(0);
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [searchText, setSearchText] = useState("");
-  const [, setToastRerender] = useState(false);
-  const toasts = useRef([]);
+  const [toasts, addToast, deleteToast] = useToast();
   const limit = 5;
 
   useEffect(() => {
@@ -60,30 +59,6 @@ const BlogList = ({ isAdmin }) => {
     setCurrentPage(parseInt(pageParam) || 1);
     getPosts(parseInt(pageParam) || 1);
   }, []);
-
-  const deleteToast = (id) => {
-    const filteredToasts = toasts.current.filter((toast) => {
-      return toast.id !== id;
-    });
-
-    toasts.current = filteredToasts;
-    setToastRerender((prev) => !prev);
-  };
-
-  const addToast = (toast) => {
-    const id = uuidv4();
-    const toastWithId = {
-      ...toast,
-      id,
-    };
-    toasts.current = [...toasts.current, toastWithId];
-
-    setToastRerender((prev) => !prev);
-
-    setTimeout(() => {
-      deleteToast(id);
-    }, 5000);
-  };
 
   const deleteBlog = (e, id) => {
     e.stopPropagation();
@@ -132,7 +107,7 @@ const BlogList = ({ isAdmin }) => {
 
   return (
     <div>
-      <Toast toasts={toasts.current} deleteToast={deleteToast} />
+      <Toast toasts={toasts} deleteToast={deleteToast} />
       <input
         type="text"
         placeholder="Search..."
