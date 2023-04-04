@@ -7,7 +7,14 @@ const initialState = {
 const toastSlice = createSlice({
   name: "toast",
   initialState,
-  reducers: {},
+  reducers: {
+    addToast: (state, action) => {
+      state.toasts.push(action.payload);
+    },
+  },
 });
+
+console.log(toastSlice.actions.addToast("hello"));
+export const { addToast } = toastSlice.actions;
 
 export default toastSlice.reducer;
