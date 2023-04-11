@@ -19,7 +19,6 @@ const toastSlice = createSlice({
   },
 });
 
-console.log(toastSlice.actions.addToast("hello"));
 export const { addToast, removeToast } = toastSlice.actions;
 
 export default toastSlice.reducer;
