@@ -18,6 +18,7 @@ const BlogList = ({ isAdmin }) => {
   const [numberOfPosts, setNumberOfPosts] = useState(0);
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [searchText, setSearchText] = useState("");
+  const [error, setError] = useState("");
 
   const { addToast } = useToast();
   const limit = 5;
@@ -32,28 +33,39 @@ const BlogList = ({ isAdmin }) => {
     getPosts(page);
   };
 
-  const getPosts = useCallback((page = 1) => {
-    let params = {
-      _page: page,
-      _limit: limit,
-      _sort: "id",
-      _order: "desc",
-      title_like: searchText,
-    };
-    if (!isAdmin) {
-      params = { ...params, publish: true };
-    }
+  const getPosts = useCallback(
+    (page = 1) => {
+      let params = {
+        _page: page,
+        _limit: limit,
+        _sort: "id",
+        _order: "desc",
+        title_like: searchText,
+      };
+      if (!isAdmin) {
+        params = { ...params, publish: true };
+      }
 
-    axios
-      .get(`http://localhost:3001/posts`, {
-        params,
-      })
-      .then((res) => {
-        setNumberOfPosts(res.headers["x-total-count"]);
-        setPosts(res.data);
-        setLoading(false);
-      });
-  });
+      axios
+        .get(`http://localhost:3001/posts`, {
+          params,
+        })
+        .then((res) => {
+          setNumberOfPosts(res.headers["x-total-count"]);
+          setPosts(res.data);
+          setLoading(false);
+        })
+        .catch((e) => {
+          setLoading(false);
+          setError("Someting went wrong in database");
+          addToast({
+            text: "Someting went wrong",
+            type: "danger",
+          });
+        });
+    },
+    [isAdmin, searchText]
+  );
 
   useEffect(() => {
     setCurrentPage(parseInt(pageParam) || 1);
@@ -104,6 +116,10 @@ const BlogList = ({ isAdmin }) => {
       getPosts(1);
     }
   };
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div>
