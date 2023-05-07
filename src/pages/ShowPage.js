@@ -7,14 +7,14 @@ import { useSelector } from "react-redux";
 const ShowPage = () => {
   const { id } = useParams();
   const [post, setPost] = useState(null);
-  const [loading, setLoding] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [timer, setTimer] = useState(0);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   const getPost = (id) => {
     axios.get(`http://localhost:3001/posts/${id}`).then((res) => {
       setPost(res.data);
-      setLoding(false);
+      setLoading(false);
     });
   };
 

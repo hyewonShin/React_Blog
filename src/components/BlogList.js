@@ -74,13 +74,23 @@ const BlogList = ({ isAdmin }) => {
 
   const deleteBlog = (e, id) => {
     e.stopPropagation();
-    axios.delete(`http://localhost:3001/posts/${id}`).then(() => {
-      setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
-      addToast({
-        text: "Successfully deleted",
-        type: "success",
+    axios
+      .delete(`http://localhost:3001/posts/${id}`)
+      .then(() => {
+        setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
+        addToast({
+          text: "Successfully deleted",
+          type: "success",
+        });
+      })
+      .catch((e) => {
+        setLoading(false);
+        setError("The blog could not be deleted");
+        addToast({
+          type: "danger",
+          text: "The blog could not be deleted.",
+        });
       });
-    });
   };
   if (loading) {
     <LoadingSpinner />;
